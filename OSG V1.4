@@ -1,0 +1,156 @@
+-- Made by Wever#5665f
+local ScreenGui = Instance.new('ScreenGui')
+local MainFrame = Instance.new("Frame")
+local Frame = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local Skip_Button = Instance.new("TextButton")
+local UIGradient_2 = Instance.new("UIGradient")
+local Title = Instance.new("TextLabel")
+local Credits = Instance.new("TextLabel")
+local TextBox = Instance.new("TextBox")
+ScreenGui.Parent = game.CoreGui
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+MainFrame.BackgroundTransparency = 100.000
+MainFrame.Position = UDim2.new(0.323361814, 0, 0.319290459, 0)
+MainFrame.Size = UDim2.new(0, 152, 0, 31)
+
+Frame.Parent = MainFrame
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.Position = UDim2.new(-0.000122271085, 0, -0.0114634195, 0)
+Frame.Size = UDim2.new(0, 153, 0, 138)
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(207, 85, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(34, 215, 255))}
+UIGradient.Parent = Frame
+
+Skip_Button.Name = "Skip_Button"
+Skip_Button.Parent = MainFrame
+Skip_Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Skip_Button.Position = UDim2.new(0.271159291, 0, 2.40923882, 0)
+Skip_Button.Size = UDim2.new(0, 70, 0, 31)
+Skip_Button.Font = Enum.Font.Fantasy
+Skip_Button.Text = "SKIP"
+Skip_Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+Skip_Button.TextSize = 14.000
+Skip_Button.TextWrapped = true
+Skip_Button.MouseButton1Up:Connect(function(x, y)
+local segments=TextInput:split(".")
+local Stages_Path=game --location to search
+for i,v in pairs(segments) do
+Stages_Path=Stages_Path[v]
+end
+print('-- Obby Skipper Debug --')
+print('Given Path:', tostring(Stages_Path))
+print('Stages Found:', tonumber(table.getn(Stages_Path:GetChildren())))
+local function checknumber(input_num)
+    local num = tonumber(input_num)
+    if type(num) == "number" then
+        return true
+    else
+        return false
+    end
+end
+local tab = {}
+local StagesString = ''
+for i, v in pairs(Stages_Path:GetChildren()) do
+    if checknumber(v.name) == true then
+        table.insert(tab, v)
+    end
+end
+for i, v in pairs(tab) do
+    StagesString = StagesString .. tostring(v.name..', ')
+end
+print('Recognized Stages: '..StagesString)
+table.sort(tab, function(a, b) return tonumber(a.name) < tonumber(b.name) end)
+for i, v in ipairs(tab) do
+    print('Skipping to Stage: '..v.name)
+                plr = game.Players.LocalPlayer
+                hum = plr.Character.HumanoidRootPart
+                pos = Vector3.new(v.Position.X, tonumber(v.Position.Y + 3), v.Position.Z)
+                hum.CFrame = CFrame.new(pos)
+                wait(sleep_time)
+end
+end)
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(103, 255, 126)), ColorSequenceKeypoint.new(0.95, Color3.fromRGB(37, 216, 248)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(34, 215, 255))}
+UIGradient_2.Parent = Skip_Button
+
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundTransparency = 100.000
+Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
+Title.Position = UDim2.new(0.00373399258, 0, 0.138507009, 0)
+Title.Size = UDim2.new(0, 150, 0, 21)
+Title.Font = Enum.Font.SourceSansBold
+Title.Text = "Obby Stage Skipper"
+Title.TextColor3 = Color3.fromRGB(255, 213, 41)
+Title.TextScaled = true
+Title.TextSize = 14.000
+Title.TextWrapped = true
+
+Credits.Name = "Credits"
+Credits.Parent = MainFrame
+Credits.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Credits.BackgroundTransparency = 100.000
+Credits.BorderColor3 = Color3.fromRGB(27, 42, 53)
+Credits.Position = UDim2.new(-0.00480085611, 0, 3.66459727, 0)
+Credits.Size = UDim2.new(0, 156, 0, 21)
+Credits.Font = Enum.Font.SourceSansBold
+Credits.Text = "Made by Wever#5665"
+Credits.TextColor3 = Color3.fromRGB(255, 213, 41)
+Credits.TextScaled = true
+Credits.TextSize = 14.000
+Credits.TextWrapped = true
+
+TextBox.Parent = MainFrame
+TextBox.BackgroundColor3 = Color3.fromRGB(0, 255, 59)
+TextBox.BackgroundTransparency = 0.500
+TextBox.Position = UDim2.new(0.0357397199, 0, 0.967257798, 0)
+TextBox.Size = UDim2.new(0, 141, 0, 34)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.Text = "Enter Stages Path"
+TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.TextSize = 14.000
+TextBox.FocusLost:Connect(function()
+	TextInput = TextBox.Text
+	print(TextInput)
+end)
+-- Scripts:
+local Plr = game.Players.LocalPlayer
+
+Plr:GetMouse().KeyDown:Connect(function(K)
+	if K == "/" then
+		script.Parent.Visible = not script.Parent.Visible
+	end
+end)
+
+local UserInputService = game:GetService("UserInputService")
+local TopBar = MainFrame:WaitForChild("Title")
+	
+local Camera = workspace:WaitForChild("Camera")
+	
+local DragMousePosition
+local FramePosition
+	
+TopBar.InputBegan:Connect(function (input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		Draggable = true
+		DragMousePosition = Vector2.new(input.Position.X, input.Position.Y)
+		FramePosition = Vector2.new(MainFrame.Position.X.Scale, MainFrame.Position.Y.Scale)
+	end
+end)
+	
+TopBar.InputEnded:Connect (function (input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		Draggable = false
+	end
+end)
+	
+UserInputService.InputChanged:Connect(function(input)
+	if Draggable == true then
+		local NewPosition = FramePosition + ((Vector2.new(input.Position.X, input.Position.Y) - DragMousePosition) / Camera.ViewportSize)
+		MainFrame.Position = UDim2.new(NewPosition.X, 0, NewPosition.Y, 0)
+	end
+end)
